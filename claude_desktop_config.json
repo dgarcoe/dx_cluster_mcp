@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "dx-cluster": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-proxy",
+        "http://YOUR-SERVER-IP:8000/sse"
+      ],
+      "env": {
+        "MCP_AUTH_HEADER": "Authorization: Bearer your-very-secure-random-api-key-here-change-me"
+      }
+    }
+  }
+}

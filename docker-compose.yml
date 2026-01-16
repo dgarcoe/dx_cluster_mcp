@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  dx-cluster-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dx-cluster-mcp-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DX_CLUSTER_HOST=${DX_CLUSTER_HOST:-dxc.nc7j.com}
+      - DX_CLUSTER_PORT=${DX_CLUSTER_PORT:-7373}
+      - CALLSIGN=${CALLSIGN:-N0CALL}
+      - API_KEY=${API_KEY:-your-secure-api-key-here}
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8000
+    env_file:
+      - .env
+    networks:
+      - ea1rfi-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.docker.compose.project=dx-cluster-mcp"
+      - "description=DX Cluster MCP Server for Ham Radio"
+
+networks:
+  ea1rfi-network:
+    external: true
