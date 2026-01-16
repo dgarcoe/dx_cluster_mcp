@@ -11,8 +11,7 @@ from typing import Optional, List, Dict, Any
 import re
 from collections import defaultdict
 
-from fastmcp import FastMCP
-from fastmcp.exceptions import InvalidRequestError
+from fastmcp import FastMCP, ToolError
 
 
 # Configuration from environment variables
@@ -165,7 +164,7 @@ async def read_spots(count: int = 10, band: Optional[str] = None,
         return spots
 
     except Exception as e:
-        raise InvalidRequestError(f"Failed to read spots: {str(e)}")
+        raise ToolError(f"Failed to read spots: {str(e)}")
 
 
 @mcp.tool()
@@ -184,11 +183,11 @@ async def post_spot(frequency: float, dx_callsign: str, comment: str = "") -> Di
     try:
         # Validate frequency (should be between 1.8 and 30 MHz for HF)
         if not (1.8 <= frequency <= 450.0):
-            raise InvalidRequestError("Frequency must be between 1.8 and 450.0 MHz")
+            raise ToolError("Frequency must be between 1.8 and 450.0 MHz")
 
         # Validate callsign format (basic check)
         if not re.match(r'^[A-Z0-9/-]+$', dx_callsign.upper()):
-            raise InvalidRequestError("Invalid callsign format")
+            raise ToolError("Invalid callsign format")
 
         # Build DX command
         command = f"dx {frequency} {dx_callsign.upper()}"
@@ -206,7 +205,7 @@ async def post_spot(frequency: float, dx_callsign: str, comment: str = "") -> Di
         }
 
     except Exception as e:
-        raise InvalidRequestError(f"Failed to post spot: {str(e)}")
+        raise ToolError(f"Failed to post spot: {str(e)}")
 
 
 @mcp.tool()
@@ -292,10 +291,10 @@ async def analyze_spots(hours: int = 1, analysis_type: str = "summary") -> Dict[
             }
 
         else:
-            raise InvalidRequestError(f"Unknown analysis type: {analysis_type}")
+            raise ToolError(f"Unknown analysis type: {analysis_type}")
 
     except Exception as e:
-        raise InvalidRequestError(f"Failed to analyze spots: {str(e)}")
+        raise ToolError(f"Failed to analyze spots: {str(e)}")
 
 
 @mcp.tool()
