@@ -4,7 +4,9 @@ A FastMCP-based server for Ham Radio DX Cluster operations with SSE transport an
 """
 
 import os
+import sys
 import asyncio
+import argparse
 import telnetlib3
 from datetime import datetime
 from typing import Optional, List, Dict, Any
@@ -417,11 +419,42 @@ async def authenticate(request, call_next):
 
 
 if __name__ == "__main__":
-    # Run with SSE transport
-    # The API key will be validated via middleware
-    print(f"Starting DX Cluster MCP Server")
-    print(f"Cluster: {DX_CLUSTER_HOST}:{DX_CLUSTER_PORT}")
-    print(f"Callsign: {CALLSIGN}")
-    print(f"API Key authentication: {'Enabled' if API_KEY != 'your-secure-api-key-here' else 'DISABLED (SET API_KEY!)'}")
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="DX Cluster MCP Server")
+    parser.add_argument(
+        "--transport",
+        type=str,
+        choices=["stdio", "sse"],
+        default=os.getenv("TRANSPORT", "sse"),
+        help="Transport type: stdio for local/Claude Desktop, sse for remote access (default: sse)"
+    )
+    parser.add_argument(
+        "--host",
+        type=str,
+        default=os.getenv("SERVER_HOST", "0.0.0.0"),
+        help="Host to bind to for SSE transport (default: 0.0.0.0)"
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.getenv("SERVER_PORT", "8000")),
+        help="Port to bind to for SSE transport (default: 8000)"
+    )
 
-    mcp.run(transport="sse", host="0.0.0.0", port=8000)
+    args = parser.parse_args()
+
+    # Print startup information
+    print(f"Starting DX Cluster MCP Server", file=sys.stderr)
+    print(f"Transport: {args.transport}", file=sys.stderr)
+    print(f"Cluster: {DX_CLUSTER_HOST}:{DX_CLUSTER_PORT}", file=sys.stderr)
+    print(f"Callsign: {CALLSIGN}", file=sys.stderr)
+
+    if args.transport == "sse":
+        print(f"API Key authentication: {'Enabled' if API_KEY != 'your-secure-api-key-here' else 'DISABLED (SET API_KEY!)'}", file=sys.stderr)
+        print(f"Server URL: http://{args.host}:{args.port}", file=sys.stderr)
+        mcp.run(transport="sse", host=args.host, port=args.port)
+    else:
+        # stdio transport - no API key needed for local use
+        print(f"Running in stdio mode for local Claude Desktop integration", file=sys.stderr)
+        print(f"API Key authentication: Disabled (stdio mode)", file=sys.stderr)
+        mcp.run(transport="stdio")

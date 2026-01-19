@@ -1,6 +1,21 @@
 {
   "mcpServers": {
-    "dx-cluster": {
+    "dx-cluster-local": {
+      "comment": "LOCAL MODE (stdio) - Run server locally on Windows/Mac/Linux without Docker",
+      "command": "python",
+      "args": [
+        "C:\\Users\\YourName\\dx_cluster_mcp\\server.py",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "CALLSIGN": "YOUR_CALLSIGN_HERE",
+        "DX_CLUSTER_HOST": "dxc.nc7j.com",
+        "DX_CLUSTER_PORT": "7373"
+      }
+    },
+    "dx-cluster-remote": {
+      "comment": "REMOTE MODE (SSE) - Connect to remote server via MCP Proxy",
       "command": "npx",
       "args": [
         "-y",

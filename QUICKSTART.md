@@ -2,6 +2,74 @@
 
 Get your DX Cluster MCP Server running in 5 minutes!
 
+## Choose Your Setup
+
+- **[Local Setup (Windows/Mac/Linux)](#local-setup-windowsmaclinux)** - Run locally without Docker ⚡ *Fastest*
+- **[Server Setup (Linux/Docker)](#server-setup-linuxdocker)** - Deploy on a server for remote access
+
+---
+
+## Local Setup (Windows/Mac/Linux)
+
+**Perfect for**: Personal use, development, Windows 11 without Docker
+
+### 1. Install Python
+
+```bash
+# Check Python version (need 3.11+)
+python --version
+```
+
+If not installed, download from [python.org](https://www.python.org/downloads/)
+
+### 2. Setup Server
+
+```bash
+# Clone or download repository
+git clone https://github.com/dgarcoe/dx_cluster_mcp.git
+cd dx_cluster_mcp
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure
+cp .env.example .env
+# Edit .env and set your CALLSIGN
+```
+
+### 3. Configure Claude Desktop
+
+**Windows**: Edit `%APPDATA%\Claude\claude_desktop_config.json`
+**Mac/Linux**: Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "dx-cluster": {
+      "command": "python",
+      "args": [
+        "/full/path/to/server.py",
+        "--transport",
+        "stdio"
+      ],
+      "env": {
+        "CALLSIGN": "YOUR_CALLSIGN"
+      }
+    }
+  }
+}
+```
+
+**Windows path example**: `"C:\\Users\\YourName\\dx_cluster_mcp\\server.py"`
+
+### 4. Restart Claude Desktop
+
+That's it! Ask Claude: **"Show me the last 10 DX spots"**
+
+📖 **Detailed Guide**: See [SETUP_WINDOWS_LOCAL.md](SETUP_WINDOWS_LOCAL.md)
+
+---
+
 ## Server Setup (Linux/Docker)
 
 ```bash

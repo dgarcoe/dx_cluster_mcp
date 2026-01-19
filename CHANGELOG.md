@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-19
+
+### Added
+- **stdio Transport Mode**: Server now supports running locally without Docker
+  - New `--transport` command-line argument to choose between stdio and SSE modes
+  - Perfect for Windows 11/10 users who want to run locally
+  - No API key required in stdio mode (local process only)
+  - No network configuration needed (direct stdin/stdout communication)
+- **SETUP_WINDOWS_LOCAL.md**: Comprehensive guide for local Windows setup
+  - Step-by-step installation instructions
+  - Python environment setup
+  - Claude Desktop configuration for stdio mode
+  - Troubleshooting section for common Windows issues
+  - Virtual environment setup instructions
+- **Dual Configuration Example**: Updated `claude_desktop_config.json` with both stdio and SSE examples
+- **Enhanced Documentation**:
+  - Updated README.md with deployment options comparison
+  - Updated QUICKSTART.md with local setup section
+  - Architecture diagrams for both transport modes
+  - Prerequisites split by deployment mode
+
+### Changed
+- Server startup now uses argparse for command-line options
+- Print statements now use stderr to avoid interfering with stdio transport
+- Environment variables can be used to set default transport, host, and port
+- `.env.example` updated with TRANSPORT variable
+
+### Fixed
+- Proper error handling for both transport modes
+- Correct output redirection for stdio mode
+
+### Benefits of stdio Mode
+- ✅ Simple setup - No Docker, nginx, or network configuration required
+- ✅ Fast - No network latency, runs locally
+- ✅ Secure - No exposed ports or API keys needed
+- ✅ Portable - Works on Windows, Mac, and Linux with just Python
+- ✅ Easy testing - Great for development and debugging
+
 ## [1.0.0] - 2026-01-16
 
 ### Added

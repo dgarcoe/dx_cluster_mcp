@@ -8,12 +8,63 @@ A FastMCP-based Model Context Protocol (MCP) server for Ham Radio DX Cluster ope
 - **Post DX Spots**: Submit new DX spots to the cluster
 - **Analyze Spots**: Perform statistical analysis on spots (band activity, country distribution, mode analysis)
 - **Connection Management**: Check and manage DX Cluster connection status
-- **SSE Transport**: Server-Sent Events transport for remote access
-- **API Key Authentication**: Secure API key-based authentication
-- **Docker Support**: Easy deployment with Docker and docker-compose
+- **Dual Transport Modes**:
+  - **stdio** - Run locally on Windows/Mac/Linux without Docker (perfect for personal use)
+  - **SSE** - Server-Sent Events transport for remote access with API key authentication
+- **Docker Support**: Easy deployment with Docker and docker-compose for server mode
+
+## Deployment Options
+
+This server supports two deployment modes:
+
+### 1. Local Mode (stdio) - Recommended for Windows Users
+
+Run the server **locally** on your Windows/Mac/Linux machine without Docker. Perfect for:
+- Personal use on Windows 11/10
+- Development and testing
+- Single-user setups
+- Quick setup without server configuration
+
+**Setup Time**: ~5 minutes | **Difficulty**: Easy
+
+📖 **See**: [SETUP_WINDOWS_LOCAL.md](SETUP_WINDOWS_LOCAL.md)
+
+### 2. Server Mode (SSE) - For Remote Access
+
+Deploy on a **Linux server** with Docker for remote access. Perfect for:
+- Multi-user environments
+- Remote access from anywhere
+- Running on a VPS/cloud server
+- Production deployments
+
+**Setup Time**: ~15 minutes | **Difficulty**: Moderate
+
+📖 **See**: [SETUP_WINDOWS.md](SETUP_WINDOWS.md) for remote access configuration
 
 ## Architecture
 
+### Local Mode (stdio)
+```
+┌─────────────────────┐
+│  Claude Desktop     │
+│  (Windows/Mac)      │
+└──────────┬──────────┘
+           │ stdio (stdin/stdout)
+           │
+    ┌──────▼──────────┐
+    │  DX Cluster     │
+    │  MCP Server     │
+    │  (Python)       │
+    └──────┬──────────┘
+           │ Telnet
+           │
+    ┌──────▼──────────┐
+    │  DX Cluster     │
+    │  (e.g. NC7J)    │
+    └─────────────────┘
+```
+
+### Server Mode (SSE) - Remote Access
 ```
 ┌─────────────────────┐
 │  Claude Desktop     │
@@ -42,13 +93,25 @@ A FastMCP-based Model Context Protocol (MCP) server for Ham Radio DX Cluster ope
 
 ## Prerequisites
 
-- Docker and Docker Compose
+### For Local Mode (stdio)
+- Python 3.11 or higher
 - Valid Ham Radio Callsign
 - Network access to a DX Cluster (default: dxc.nc7j.com:7373)
-- Claude Desktop (for Windows client)
+- Claude Desktop
+
+### For Server Mode (SSE)
+- Docker and Docker Compose
+- Valid Ham Radio Callsign
+- Network access to a DX Cluster
+- Linux server (VPS, cloud, or local)
+- Claude Desktop (client)
 - MCP Proxy (for remote connections)
 
 ## Installation
+
+> **💡 Quick Start**: For Windows local setup without Docker, see [SETUP_WINDOWS_LOCAL.md](SETUP_WINDOWS_LOCAL.md)
+
+### Server Mode Installation (Docker)
 
 ### 1. Clone the Repository
 
